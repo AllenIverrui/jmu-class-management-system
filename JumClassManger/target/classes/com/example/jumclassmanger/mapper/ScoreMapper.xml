@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jumclassmanger.mapper.ScoreMapper">
+  <resultMap id="BaseResultMap" type="com.example.jumclassmanger.bean.Score">
+    <id column="Sno" jdbcType="CHAR" property="sno" />
+    <id column="Cno" jdbcType="CHAR" property="cno" />
+    <result column="Degree" jdbcType="DECIMAL" property="degree" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from score
+    where Sno = #{sno,jdbcType=CHAR}
+      and Cno = #{cno,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.jumclassmanger.bean.Score">
+    insert into score (Sno, Cno, Degree)
+    values (#{sno,jdbcType=CHAR}, #{cno,jdbcType=CHAR}, #{degree,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.jumclassmanger.bean.Score">
+    update score
+    set Degree = #{degree,jdbcType=DECIMAL}
+    where Sno = #{sno,jdbcType=CHAR}
+      and Cno = #{cno,jdbcType=CHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select Sno, Cno, Degree
+    from score
+    where Sno = #{sno,jdbcType=CHAR}
+      and Cno = #{cno,jdbcType=CHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Sno, Cno, Degree
+    from score
+  </select>
+</mapper>

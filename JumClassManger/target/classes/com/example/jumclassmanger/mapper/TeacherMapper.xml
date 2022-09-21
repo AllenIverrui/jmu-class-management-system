@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jumclassmanger.mapper.TeacherMapper">
+  <resultMap id="BaseResultMap" type="com.example.jumclassmanger.bean.Teacher">
+    <id column="Tno" jdbcType="CHAR" property="tno" />
+    <result column="Tname" jdbcType="CHAR" property="tname" />
+    <result column="Tsex" jdbcType="CHAR" property="tsex" />
+    <result column="Tbirthday" jdbcType="VARCHAR" property="tbirthday" />
+    <result column="Prof" jdbcType="CHAR" property="prof" />
+    <result column="Depart" jdbcType="CHAR" property="depart" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from teacher
+    where Tno = #{tno,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.jumclassmanger.bean.Teacher">
+    insert into teacher (Tno, Tname, Tsex, Tbirthday, 
+      Prof, Depart)
+    values (#{tno,jdbcType=CHAR}, #{tname,jdbcType=CHAR}, #{tsex,jdbcType=CHAR}, #{tbirthday,jdbcType=VARCHAR},
+      #{prof,jdbcType=CHAR}, #{depart,jdbcType=CHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.jumclassmanger.bean.Teacher">
+    update teacher
+    set Tname = #{tname,jdbcType=CHAR},
+      Tsex = #{tsex,jdbcType=CHAR},
+      Tbirthday = #{tbirthday,jdbcType=VARCHAR},
+      Prof = #{prof,jdbcType=CHAR},
+      Depart = #{depart,jdbcType=CHAR}
+    where Tno = #{tno,jdbcType=CHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select Tno, Tname, Tsex, Tbirthday, Prof, Depart
+    from teacher
+    where Tno = #{tno,jdbcType=CHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Tno, Tname, Tsex, Tbirthday, Prof, Depart
+    from teacher
+  </select>
+</mapper>

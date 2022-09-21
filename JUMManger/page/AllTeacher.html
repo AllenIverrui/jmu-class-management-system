@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <script src="../js/jquery-3.5.1/jquery-3.5.1.js"></script>
+</head>
+
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+            <fieldset class="table-search-fieldset">
+                <legend>搜索信息</legend>
+                <div style="margin: 10px 10px 10px 10px">
+                    <form id="classesform" class="layui-form layui-form-pane" action="">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">教师编号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="tno" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <a type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</a>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+
+            <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                
+            </div>
+        </script>
+
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+            <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">确定修改</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+        </div>
+    </div>
+    <script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../common/url.js" charset="utf-8"></script>
+    <script>
+        layui.use(['form', 'table'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+            $.ajax({
+                dataType: 'json',
+                url: springURL + '/getAllTeacher',
+                type: 'get',
+                success: function (data1) {
+                    // console.log(data1)
+                    var option = {
+                        elem: '#currentTableId',
+                        toolbar: '#toolbarDemo',
+                        page: 'true',
+                        limits: [5, 15, 20, 25, 50, 100],
+                        defaultToolbar: ['filter', 'exports', 'print', {
+                            title: '提示',
+                            layEvent: 'LAYTABLE_TIPS',
+                            icon: 'layui-icon-tips'
+                        }],
+                        cols: [[
+                            
+                            { field: 'tno', width: 150, title: '教师编号', sort: true, edit: 'text' },
+                            { field: 'tname', width: 150, title: '教师姓名', edit: 'text' },
+                            { field: 'tsex', width: 150, title: '性别', sort: true, edit: 'text' },
+                            { field: 'prof', width: 150, title: '职务', sort: true, edit: 'text' },
+                            { field: 'depart', width: 150, title: '系别', sort: true, edit: 'text' },
+                            { field: 'tbirthday', width: 150, title: '出生年月', sort: true, edit: 'text' },
+                            { title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "left" }
+                        ]]
+                    };
+                    option.data = data1;
+                    console.log(option.data);
+                    table.render(option);
+                }
+            })
+
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+            // var table=layui.table;
+                console.log(data.field);
+                $.ajax({
+                dataType: 'json',
+                url: springURL + '/getTeacherById',
+                type: 'get',
+                data:data.field,
+                success: function (data1) {
+                    // console.log(data1)
+                    var option = {
+                        elem: '#currentTableId',
+                        toolbar: '#toolbarDemo',
+                        page: 'true',
+                        limits: [5, 15, 20, 25, 50, 100],
+                        defaultToolbar: ['filter', 'exports', 'print', {
+                            title: '提示',
+                            layEvent: 'LAYTABLE_TIPS',
+                            icon: 'layui-icon-tips'
+                        }],
+                        cols: [[
+                            
+                            { field: 'tno', width: 150, title: '教师编号', sort: true, edit: 'text' },
+                            { field: 'tname', width: 150, title: '教师姓名', edit: 'text' },
+                            { field: 'tsex', width: 150, title: '性别', sort: true, edit: 'text' },
+                            { field: 'prof', width: 150, title: '职务', sort: true, edit: 'text' },
+                            { field: 'depart', width: 150, title: '系别', sort: true, edit: 'text' },
+                            { field: 'tbirthday', width: 150, title: '出生年月', sort: true, edit: 'text' },
+                            { title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "left" }
+                        ]]
+                    };
+                    option.data = data1;
+                    console.log(option.data);
+                    if(JSON.stringify(data1)=="[null]"){
+                        layer.alert('没有找到相关信息');
+                    }else{
+                        table.render(option);
+                    }
+                    
+                }
+            })
+              
+            });
+
+            /**
+             * toolbar监听事件
+             */
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                if (obj.event === 'add') {  // 监听添加操作
+
+                    var index = layer.open({
+                        title: '添加用户',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['100%', '100%'],
+                        content: '../page/table/AddTeacher.html',
+                    });
+                    // $(window).on("resize", function () {
+                    //     layer.full(index);
+                    // });
+                } else if (obj.event === 'delete') {  // 监听删除操作
+                    var checkStatus = table.checkStatus('currentTableId')
+                        , data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                }
+            });
+
+            //监听表格复选框选择
+            table.on('checkbox(currentTableFilter)', function (obj) {
+                console.log(obj)
+            });
+
+            // 单行删除
+            table.on('tool(currentTableFilter)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'edit') {
+                    layer.confirm("确定修改吗？", function (del) {
+                        console.log(obj.data);
+                        $.ajax({
+
+                            url: springURL + '/updateTeacher',
+
+                            type: "put",
+
+                            dataType: "json",
+
+                            data: obj.data,
+
+                            //请求成功的处理
+                            //请求成功的处理
+                            success: function (data) {
+                                if (data.check == "教师修改失败") {
+                                    var index = layer.alert('教师修改失败,编号与其他老师冲突', {
+                                        icon: 2,
+                                        title: '删除结果',
+
+                                    }, function () {
+
+                                        // 关闭弹出层
+                                        layer.close(index);
+
+                                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                        parent.layer.close(iframeIndex);
+
+                                    });
+                                } else {
+                                    var index = layer.alert('修改成功', {
+                                        icon: 1,
+                                        title: '最终的提交信息'
+                                    }, function () {
+
+                                        // 关闭弹出层
+                                        layer.close(index);
+
+                                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                        parent.layer.close(iframeIndex);
+                                    });
+                                }
+
+                            },
+                            //请求失败的处理
+                            error: function (jqXHR) {
+                                layer.alert('系统繁忙');
+                                console.log(jqXHR);
+                            }
+                        })
+                    })
+
+                    return false;
+                } else if (obj.event === 'delete') {
+                    layer.confirm('真的删除该教师吗？', function (index) {
+
+                        console.log(obj.data);
+                        $.ajax({
+
+                            url: springURL + '/deleteTeacherByTno',
+
+                            type: "delete",
+
+                            dataType: "json",
+
+                            data: obj.data,
+
+                            //请求成功的处理
+                            //请求成功的处理
+                            success: function (data) {
+                                if (data.check == "教师删除失败") {
+                                    var index = layer.alert('教师删除失败,当前教师还有相关课程', {
+                                        icon: 2,
+                                        title: '删除结果',
+
+                                    }, function () {
+
+                                        // 关闭弹出层
+                                        layer.close(index);
+
+                                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                        parent.layer.close(iframeIndex);
+
+                                    });
+                                } else {
+                                    var index = layer.alert('教师删除成功', {
+                                        icon: 1,
+                                        title: '最终的提交信息'
+                                    }, function () {
+
+                                        // 关闭弹出层
+                                        layer.close(index);
+
+                                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                        parent.layer.close(iframeIndex);
+                                        obj.del();
+                                    });
+                                }
+
+                            },
+                            //请求失败的处理
+                            error: function (jqXHR) {
+                                layer.alert('系统繁忙');
+                                console.log(jqXHR);
+                            }
+                        })
+
+                        layer.close(index);
+                    });
+                }
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>

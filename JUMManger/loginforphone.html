@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<link rel="shortcut icon" href="image/favicon.ico">
+<head>
+    <meta charset="UTF-8">
+    <title>班级管理系统-登陆</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="./lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="./css/rain.css">
+    <link rel="stylesheet" href="./css/loginforphone.css">
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="./js/jquery-3.5.1/jquery-3.5.1.js"></script>
+    <script src="./lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <link rel="shortcut icon" href="./images/favicon.ico">
+
+</head>
+<!-- <div class="container2">
+    
+    <br>
+    <button class="layui-btn layui-btn-danger">安卓App下载</button>
+</div> -->
+<body>
+    <div class="contentLogin">
+        <!-- 放这里下雨 -->
+        <div class="container">
+            <div class="form-box">
+                <!-- 注册 -->
+                <form method="post" name="signform" id="signform" action="register">
+                    <div class="register-box hidden">
+                        <h1>Register</h1>
+                        <input type="text" name="name" placeholder="用户名">
+                        <input type="email" name="email" placeholder="邮箱">
+                        <button id="checkNumber" name="checkNumber" type="button">发送验证码</button>
+                        <input type="password" name="password" placeholder="密码">
+                        <input type="password" name="password2" placeholder="确认密码">
+                        <input type="text" name="userCheckNumber" placeholder="验证码">
+                        <button id="registerNow" type="button">注册</button>
+                    </div>
+                </form>
+                <!-- 登录 -->
+                <form class="layui-form" method="post" action="" name="loginform" id="loginform">
+                    <div class="login-box">
+                        <a class="layui-btn layui-btn-danger" id="admin">管理员登录</a><br>
+                        <h1>Login</h1>
+                        <input type="text" name="username" placeholder="用户名">
+                        <input type="password" name="password" placeholder="密码">
+                        <button class="layui-upload-button" lay-submit="" lay-filter="login">登录</button>
+                    </div>
+                </form>
+            </div>
+            <div class="con-box left">
+                <h2><span>欢迎注册</span></h2>
+                <img src="./images/logo2.png" alt="">
+                <p>已有账号</p>
+                <button id="login">去登录</button>
+            </div>
+            <div class="con-box right">
+                <h2>欢迎来到<span>JMU班级管理系统</span></h2>
+                <img src="./images/logo2.png" alt="">
+                <p>没有账号？</p>
+                <button id="register">去注册</button>
+            </div>
+            
+        </div>
+        
+        <script type="text/javascript" src="./common/滑动forphone.js"></script>
+        <div id="rainBox"></div>
+    </div>
+    <script type="text/javascript" src="./common/rain.js"></script>
+    <script type="text/javascript" src="./js/jquery-3.5.1/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="./common/url.js"></script>
+    <!-- 注册点击事件 -->
+    <script>
+        $('#admin').click(function(){
+            var index = layer.open({
+                        title: '添加学生成绩',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['100%', '100%'],
+                        content: './login_admin.html',
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+        })
+
+
+        $('#registerNow').click(function () {
+            var name = signform.name.value;
+            var password = signform.password.value;
+            var email = signform.email.value;
+            console.log(name + "名字测试");
+            console.log(getCheckNumber + '测试验证码注册');
+            if (signform.userCheckNumber.value != getCheckNumber) {
+                layer.msg('验证码有误，注册失败');
+            } else if (name == "" || password == "" || email == "") {
+                layer.msg('请输入完整信息');
+            } else {
+
+                console.log(email + "得到邮件");
+                $.ajax({
+
+                    url: springURL + "/register",
+
+                    type: "post",
+
+                    dataType: "json",
+
+                    data: { name: name, email: email, password: password },
+
+                    //请求成功的处理
+                    //请求成功的处理
+                    success: function (data) {
+                        console.log(data);
+                        //获取需要的数据
+                        //拼接字符串
+                        if (data.check == "注册失败") {
+                            layer.msg('当前用户名已经存在，请选择其他的用户名');
+                        } else {
+                            layer.msg('注册申请成功，等待管理员认证，认证信息会通过邮箱方式发送到您邮箱',{
+                                time:7000
+                            });
+                        }
+                    },
+                    //请求失败的处理
+                    error: function (jqXHR) {
+                        console.log('注册有误');
+                        console.log(jqXHR);
+                    }
+                })
+
+            }
+        })
+    </script>
+    <!-- 发送邮箱验证码 -->
+    <!-- <script>
+    var getCheckNumber;
+    </script> -->
+    <script>
+        $("#checkNumber").click(function () {
+            var reciver = signform.email.value;
+            if (signform.email.value == "") {
+                layer.msg('请输入邮箱');
+            } else {
+                $.ajax({
+
+                    url: springURL + "/send",
+
+                    type: "get",
+
+                    dataType: "json",
+                    data:{
+                        reciver:signform.email.value
+                    },
+
+                    //请求成功的处理
+                    //请求成功的处理
+                    success: function (data) {
+                        console.log(data);
+                        //获取需要的数据
+                        //拼接字符串
+                        getCheckNumber = data.CheckNumber;
+                        console.log(getCheckNumber + '检验验证码已经获得');
+                    },
+                    //请求失败的处理
+                    error: function (jqXHR) {
+                        console.log('验证码的发送有误');
+                        console.log(jqXHR);
+                    }
+                })
+            }
+
+
+        })
+    </script>
+    <script>
+        console.log(getCheckNumber + '测试验证码全局使用');
+    </script>
+    <!-- 登录部分 -->
+    <script>
+        layui.use(['form'], function () {
+            var form = layui.form,
+                layer = layui.layer;
+
+            // 登录过期的时候，跳出ifram框架
+            if (top.location != self.location) top.location = self.location;
+
+            // 进行登录操作
+
+            form.on('submit(login)', function (data) {
+                data = data.field;
+                if (data.username == '') {
+                    layer.msg('用户名不能为空');
+                    return false;
+                }
+                if (data.password == '') {
+                    layer.msg('密码不能为空');
+                    return false;
+                }
+
+                $.ajax({
+                    type: 'get',
+
+                    url: springURL + "/loginCheck",
+
+                    dataType: 'json',
+                    data: {
+                        name: data.username,
+                        password: data.password
+                    },
+
+                   
+                    success: function (loginCheck) {
+                        console.log(loginCheck);
+                        if (loginCheck.check == "登录成功") {
+                            layer.msg('登录成功请稍后', { anim: 5 }, function () {
+                                localStorage.setItem("username",data.username);
+                                localStorage.setItem("userid",loginCheck.userid);
+                                
+
+                                window.location = './index.html';
+                            });
+                        }
+                        if (loginCheck.check == "登录失败") {
+                            layer.msg('登录失败', { anim: 5 }, function () {
+                            })
+                        }
+                        return false;
+                    },
+                    error: function (jqXHR) {
+                        console.log(jqXHR);
+                        layer.msg('登录失败', function () {
+                        })
+                        return false;
+                    }
+
+                });
+                return false;
+            });
+
+        });
+    </script>
+</body>
+
+</html>

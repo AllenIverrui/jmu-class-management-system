@@ -1,0 +1,53 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "page/Student.html?t=1"
+  },
+  "logoInfo": {
+    "title": "JMU管理系统",
+    "image": "images/jum.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "班级管理",
+          "href": "page/AllClasses.html",
+          "icon": "fa fa-home",
+          "target": "_self"
+        },
+        {
+          "title": "课程管理",
+          "icon": "fa fa-window-maximize",
+          "href": "page/AllCourse.html",
+          "target": "_self"
+        },
+        {
+          "title": "学生管理",
+          "icon": "fa fa-gears",
+          "href": "page/Student.html",
+          "target": "_self"
+        },
+        {
+          "title": "教师管理",
+          "href": "page/AllTeacher.html",
+          "icon": "fa fa-file-text",
+          "target": "_self"
+        },
+        {
+          "title": "学生成绩管理",
+          "icon": "fa fa-flag-o",
+          "href": "page/AllStudent.html",
+          "target": "_self"
+        }
+        
+      ]
+    }
+    
+  ]
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jumclassmanger.mapper.CourseMapper">
+  <resultMap id="BaseResultMap" type="com.example.jumclassmanger.bean.Course">
+    <id column="Cno" jdbcType="CHAR" property="cno" />
+    <result column="Cname" jdbcType="VARCHAR" property="cname" />
+    <result column="Tno" jdbcType="CHAR" property="tno" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from course
+    where Cno = #{cno,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.jumclassmanger.bean.Course">
+    insert into course (Cno, Cname, Tno)
+    values (#{cno,jdbcType=CHAR}, #{cname,jdbcType=VARCHAR}, #{tno,jdbcType=CHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.jumclassmanger.bean.Course">
+    update course
+    set Cname = #{cname,jdbcType=VARCHAR},
+      Tno = #{tno,jdbcType=CHAR}
+    where Cno = #{cno,jdbcType=CHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select Cno, Cname, Tno
+    from course
+    where Cno = #{cno,jdbcType=CHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Cno, Cname, Tno
+    from course
+  </select>
+</mapper>

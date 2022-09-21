@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+    <script src="../../common/url.js" charset="utf-8"></script>
+    <script src="../../common/common.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label required">班级名</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="输入新建的班级名"
+                    value="" class="layui-input">
+                <tip>填写自己要创建的班级名</tip>
+                <input type="hidden" name="userid" class="userid" 
+                    value="" id='userid' class="layui-input">
+                <tip>填写自己要创建的班级名</tip>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+    <script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+
+    <script>
+        layui.use(['form'], function () {
+
+            var form = layui.form,
+                layer = layui.layer,
+                $ = layui.$;
+            $("#userid").attr("value", userid);
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                console.log(data.field);
+                $.ajax({
+
+                    url: springURL + '/addClass',
+
+                    type: "post",
+
+                    dataType: "json",
+
+                    data: data.field,
+
+                    //请求成功的处理
+                    //请求成功的处理
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.check)
+                        if (data.check == "添加班级失败") {
+                            layer.msg('当前班级已经存在', {
+                                icon: 2,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                            });
+                        } else {
+                            var index = layer.alert('班级创建成功', {
+                                icon:1,
+                                title: '最终的提交信息'
+                            }, function () {
+
+                                // 关闭弹出层
+                                layer.close(index);
+
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.location.reload();
+                                parent.layer.close(iframeIndex);
+
+                            });
+                        }
+
+                    },
+                    //请求失败的处理
+                    error: function (jqXHR) {
+                        layer.alert('系统繁忙');
+                        console.log(jqXHR);
+                    }
+                })
+
+                return false;
+            });
+
+        });
+    </script>
+</body>
+
+</html>

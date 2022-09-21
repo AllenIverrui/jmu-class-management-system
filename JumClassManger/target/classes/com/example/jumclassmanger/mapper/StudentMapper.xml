@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jumclassmanger.mapper.StudentMapper">
+  <resultMap id="BaseResultMap" type="com.example.jumclassmanger.bean.Student">
+    <id column="Sno" jdbcType="CHAR" property="sno" />
+    <result column="Sname" jdbcType="CHAR" property="sname" />
+    <result column="Ssex" jdbcType="CHAR" property="ssex" />
+    <result column="Sbirthday" jdbcType="VARCHAR" property="sbirthday" />
+    <result column="Classid" jdbcType="INTEGER" property="classid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from student
+    where Sno = #{sno,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.jumclassmanger.bean.Student">
+    insert into student (Sno, Sname, Ssex, Sbirthday,
+                         classid)
+    values (#{sno,jdbcType=CHAR}, #{sname,jdbcType=CHAR}, #{ssex,jdbcType=CHAR}, #{sbirthday,jdbcType=VARCHAR},
+      #{classid,jdbcType=CHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.jumclassmanger.bean.Student">
+    update student
+    set Sname = #{sname,jdbcType=CHAR},
+      Ssex = #{ssex,jdbcType=CHAR},
+      Sbirthday = #{sbirthday,jdbcType=VARCHAR},
+        classid = #{classid,jdbcType=CHAR}
+    where Sno = #{sno,jdbcType=CHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select Sno, Sname, Ssex, Sbirthday, classid
+    from student
+    where Sno = #{sno,jdbcType=CHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Sno, Sname, Ssex, Sbirthday, classid
+    from student
+  </select>
+<!--  void selectAllStudent();-->
+  <select id="selectAllStudent" resultType="com.example.jumclassmanger.bean.StudentVo">
+    SELECT s.sno,s.sname,s.ssex ,s.Classid,c.cname,c.cno,sc.Degree,
+           t.Tname from student s
+                          join score sc on s.sno=sc.Sno
+                          join course c on sc.Cno=c.Cno
+                          join teacher t on t.Tno=c.Tno
+  </select>
+<!--  List<StudentAllMsg> getAllMsgsBySno(String sno);-->
+  <select id="getAllMsgsBySno" resultType="com.example.jumclassmanger.bean.StudentVo">
+    SELECT s.sno,s.sname,s.ssex ,s.Classid,c.cname,c.cno,sc.Degree,
+           t.Tname from student s
+                          join score sc on s.sno=sc.Sno
+                          join course c on sc.Cno=c.Cno
+                          join teacher t on t.Tno=c.Tno
+            where s.sno=#{sno,jdbcType=CHAR}
+  </select>
+<!--  List<StudentAllMsg> getAllMsgsByCno(String sno);-->
+  <select id="getAllMsgsByCno" resultType="com.example.jumclassmanger.bean.StudentVo">
+    SELECT s.sno,s.sname,s.ssex ,s.Classid,c.cname,c.cno,sc.Degree,
+           t.Tname from student s
+                          join score sc on s.sno=sc.Sno
+                          join course c on sc.Cno=c.Cno
+                          join teacher t on t.Tno=c.Tno
+    where c.cno=#{cno,jdbcType=CHAR}
+  </select>
+<!--  int deleteStudenAll(String sno);-->
+  <delete id="deleteStudenAll" parameterType="java.lang.String">
+    delete from student where sno=#{sno};
+    delete from score where sno=#{sno};
+  </delete>
+<!--  Student searchStudentByName(String sname);-->
+  <select id="searchStudentByName" parameterType="string" resultMap="BaseResultMap">
+    select Sno, Sname, Ssex, Sbirthday, classid
+    from student
+    where sname = #{sname,jdbcType=VARCHAR}
+  </select>
+<!--    Student searchStudentByClass(String cname);-->
+    <select id="searchStudentByClass" parameterType="integer" resultMap="BaseResultMap">
+        select Sno, Sname, Ssex, Sbirthday, classid
+        from student
+        where classid = #{Classid,jdbcType=INTEGER}
+    </select>
+</mapper>

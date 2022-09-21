@@ -1,0 +1,16 @@
+server:
+  port: 9099
+  servlet:
+    context-path: /JmuClassManger
+spring:
+    #  验证码发送
+  mail:
+    default-encoding: utf-8
+    host: smtp.qq.com
+    username: 你的QQ邮箱
+    password: 更改为你qq邮箱的授权码
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/stu?serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456

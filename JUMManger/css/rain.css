@@ -1,0 +1,33 @@
+/* 下雨特效 */
+*{
+	margin: 0;
+	padding: 0;
+	/* 重置html所有元素 */
+}
+.contentLogin{
+	width: 100vw;
+	height: 100vh;
+    /* 弹性布局 水平+垂直居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.content{
+	width: 100vw;
+	height: 100vh;
+}
+#rainBox{
+	position: fixed;
+	top:0;
+	left:0;
+	width: 100vw;
+	height: 100vh;
+	/* 不遮挡其他元素事件触发 */
+	 pointer-events: none;
+}
+.rain{
+	position:absolute;
+	width: 5px;
+	height: 80px;
+	background: linear-gradient(rgba(255, 255, 255, .3),rgba(255,255,255,.6));
+}

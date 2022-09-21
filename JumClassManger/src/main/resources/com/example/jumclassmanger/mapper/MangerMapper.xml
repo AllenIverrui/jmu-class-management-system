@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jumclassmanger.mapper.MangerMapper">
+  <resultMap id="BaseResultMap" type="com.example.jumclassmanger.bean.Manger">
+    <id column="name" jdbcType="VARCHAR" property="name" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manger
+    where name = #{name,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.jumclassmanger.bean.Manger">
+    insert into manger (name, password)
+    values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.jumclassmanger.bean.Manger">
+    update manger
+    set password = #{password,jdbcType=VARCHAR}
+    where name = #{name,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select name, password
+    from manger
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select name, password
+    from manger
+  </select>
+<!--  int checkLogin(Manger manger);-->
+  <select id="checkLogin" parameterType="com.example.jumclassmanger.bean.Manger" resultMap="BaseResultMap">
+    select name,password
+    from manger where name=#{name,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </select>
+</mapper>
