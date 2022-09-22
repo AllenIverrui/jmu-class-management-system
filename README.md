@@ -17,6 +17,8 @@ JumClassManger web后端
 
 #### 安装教程
 
+【jum管理系统运行步骤】 https://www.bilibili.com/video/BV1ET411T7Md?share_source=copy_web&vd_source=8fc1eb17a106d8ec49c374d5f60348b4
+
 #### 使用说明
 
 1.  xxxx
