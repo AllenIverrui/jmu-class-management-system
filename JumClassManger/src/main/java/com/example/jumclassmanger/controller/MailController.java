@@ -39,7 +39,7 @@ public class MailController {
     @ApiOperation("安卓app下载")
     @GetMapping("/DownloadAppforAndroid")
     public void getFile(HttpServletResponse response) throws Exception{
-        File readFile = new File("C:/Users/Administrator/Desktop/Jmu/jum班级管理系统.apk");
+        File readFile = new File(System.getProperty("user.dir")+"/setup/jum班级管理系统.apk");
         //字节流-用于读文件  这里只是demo用的非缓冲流。实际项目可以用BufferedInputStream。 此功能是读取图片，所以用的字节流。如果是文本的话可以用字符流效率高，具体类看下面注释
         //        BufferedReader bufferedReader = new BufferedReader(new FileReader(readFile));//字符流
         FileInputStream fileInputStream = new FileInputStream(readFile);//字节流
